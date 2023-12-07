@@ -5,7 +5,7 @@
         <div class="zong">
           {{ 'PAP总数: ' + this.papNumber + '个' }}
         </div>
-        <span class="zi">个人所有角色出勤舰队详情以及PAP统计</span>
+        <span class="zi">个人出勤详情</span>
         <el-date-picker v-model="time" type="month" placeholder="选择月份" @change="papTime" class="date">
         </el-date-picker>
         <el-button type="primary" @click="getlist" round class=" btn">查询</el-button>

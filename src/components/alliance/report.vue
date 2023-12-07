@@ -4,13 +4,14 @@
             <div slot="header" class="clearfix">
               <el-row>
                 <span class="zi">{{ this.year + '年' + this.month }}联盟公司月报</span>
-                <el-date-picker v-model="time" type="month" placeholder="选择月份" @change="getTimeInfo" class="date">
+                <el-date-picker v-model="time" type="month" placeholder="选择月份" @change="getReport" class="date">
                 </el-date-picker>
                 <el-button type="primary" @click="getReport" round class=" btn">查询</el-button>
               </el-row>
               <el-row>
-<!--                <el-button round type="primary" @click="getExport">导出明细</el-button>-->
                 <el-button v-if="isAdminFlag" round type="primary" @click="saveCorpLevel">保存公司等级</el-button>
+                <el-button round type="primary" @click="getErrorEsiExport">导出我司ESI问题成员</el-button>
+                <span style="font-size: 16px;">导出人员会大于等于你的无esi数量，因为一个人会存在多个角色。黄色底是公司欠税，红色底是pap不合格。</span>
               </el-row>
 
             </div>
@@ -128,10 +129,6 @@ export default {
         }
     },
     methods: {
-        getTimeInfo() {
-            this.month = moment(this.time).format("MM");
-            this.year = moment(this.time).format("YYYY");
-        },
         //监听 pagesize 改变的事件
         handleSizeChange(newsize) {
             //这里conso 选中第几页 最新的值
@@ -155,8 +152,9 @@ export default {
         },
         //pap公司排行
         async getReport() {
+          this.month = moment(this.time).format("MM");
+          this.year = moment(this.time).format("YYYY");
             this.loading = true;
-            this.getTimeInfo();
             const { data: res } = await this.$http({
                 method: 'get',
                 url: 'https://tools.dc-eve.com/report/report',
@@ -178,24 +176,33 @@ export default {
               this.isAdminFlag = res.data[0].isAdmin;
             }
         },
-      getExport() {
-        axios({
-          url: 'https://tools.dc-eve.com/report/report',
-          method: 'GET',
-          responseType: 'blob', // Important
+      async getErrorEsiExport() {
+        const { data: res } = await this.$http({
+          method: 'get',
+          url: 'https://tools.dc-eve.com/report/esi/corpEsiErrorExport',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem("token"),
+          },
+          params: {
+            month: this.month,
+            page: this.currentPage,
+            size: this.pagesize,
+            year: this.year
+          },
+          responseType : 'arraybuffer'
         })
-            .then(response => {
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', 'example.txt');
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            })
-            .catch(error => {
-              console.error('Error downloading file:', error);
-            });
+        /// 将二进制数据封装成 Blob 对象
+        const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        // 创建a标签，设置下载链接和文件名
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = this.year + '-' + this.month + 'esi问题人员.xlsx';
+        // 模拟点击a标签进行文件下载
+        document.body.appendChild(link);
+        link.click();
+        // 移除a标签
+        document.body.removeChild(link);
       },
       saveCorpLevel() {
         this.loading = true;
@@ -221,18 +228,6 @@ export default {
           this.$message.error(error);
           _that.loading = false;
         });
-        // const {data: res} = await this.$http({
-        //   method: 'post',
-        //   url: 'https://tools.dc-eve.com/report/report',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': sessionStorage.getItem("token"),
-        //   },
-        //   params: {
-        //     list: "JSON.stringify(this.jsonData)",
-        //   }
-        // })
-
       },
       tableRowClassName({row, rowIndex}) {
         if (row.papAvg < 3) {
