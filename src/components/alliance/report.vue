@@ -9,7 +9,7 @@
                 <el-button type="primary" @click="getReport" round class=" btn">查询</el-button>
               </el-row>
               <el-row>
-                <el-button v-if="isAdminFlag" round type="primary" @click="saveCorpLevel">保存公司等级</el-button>
+                <el-button v-if="isAdminFlag" round type="primary" @click="saveCorpLevel">保存缴纳情况和公司等级</el-button>
                 <el-button round type="primary" @click="getErrorEsiExport">导出我司ESI问题成员</el-button>
                 <span style="font-size: 16px;">导出人员会大于等于你的无esi数量，因为一个人会存在多个角色。黄色底是公司欠税，红色底是pap不合格。</span>
               </el-row>
@@ -47,6 +47,9 @@
                   prop="characterQq"
                   width="80"
                   label="无qq">
+                <template slot-scope="scope">
+                  <span> {{ scope.row.characterTotal - scope.row.characterQq }}</span>
+                </template>
               </el-table-column>
               <el-table-column
                   width="150"
@@ -68,7 +71,16 @@
                   width="100"
                   label="是否缴纳">
                 <template slot-scope="scope">
-                  <span> {{ scope.row.allianceTaxPaid ? '√' : '×' }}</span>
+                  <div class="input-box" >
+                    <el-switch
+                        active-text="是"
+                        inactive-text="否"
+                        size="small"
+                        v-if="scope.row.isAdmin"
+                        v-model="scope.row.allianceTaxPaid" >
+                    </el-switch>
+                    <span v-if="!scope.row.isAdmin"> {{ scope.row.allianceTaxPaid ? '√' : '×' }}</span>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -207,6 +219,15 @@ export default {
       saveCorpLevel() {
         this.loading = true;
         // 发送 POST 请求
+        // for (let i = 0; i < this.jsonData.length; i++) {
+        //   let paid = this.jsonData[i].allianceTaxPaid;
+        //   if (paid === '√') {
+        //     this.jsonData[i].allianceTaxPaid = true;
+        //   } else {
+        //     this.jsonData[i].allianceTaxPaid = false;
+        //   }
+        // }
+
         let _that = this;
         axios.post('https://tools.dc-eve.com/report/report', this.jsonData, {
           headers: {
