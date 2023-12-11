@@ -165,14 +165,9 @@ export default {
           year: this.year
         }
       })
-      this.jsonData = res.data;
-      this.total = res.total;
-      for (var i = 0; i < this.jsonData.length; i++) {
-        // if (this.jsonData[i].characterId == this.$store.state.form.mainCharacterId) {
-        //   this.papNumber = this.jsonData[i].value
-        // }
-        this.papNumber = this.papNumber + this.jsonData[i].value
-      }
+      this.jsonData = res.data.data;
+      this.total = res.data.total;
+      this.papNumber = res.data.totalPap;
     },
     formatter(row, column) {
       return row.address;
