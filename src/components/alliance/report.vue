@@ -22,6 +22,7 @@
                 v-loading="loading"
                 :empty-text="'无数据'"
                 :row-class-name="tableRowClassName"
+                height="1000"
             >
                 <el-table-column label="序号" width="70">
                     <template slot-scope="scope">
@@ -29,6 +30,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                    sortable
                     prop="corpName"
                     width="350"
                     label="公司名称">
