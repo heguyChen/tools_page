@@ -11,7 +11,7 @@
               <el-row>
                 <el-button v-if="isAdminFlag" round type="primary" @click="saveCorpLevel">保存缴纳情况和公司等级</el-button>
                 <el-button round type="primary" @click="getErrorEsiExport">导出我司ESI问题成员</el-button>
-                <span style="font-size: 16px;">导出人员会大于等于你的无esi数量，因为一个人会存在多个角色。黄色底是公司欠税，红色底是pap不合格。</span>
+                <span style="font-size: 16px;">导出人员会大于等于你的无esi数量，因为一个人会存在多个角色。黄色底是公司欠税。</span>
               </el-row>
 
             </div>
@@ -32,7 +32,7 @@
                 <el-table-column
                     sortable
                     prop="corpName"
-                    width="350"
+                    width="250"
                     label="公司名称">
                 </el-table-column>
               <el-table-column
@@ -61,6 +61,12 @@
                 </template>
               </el-table-column>
               <el-table-column
+                  sortable
+                  prop="corpTax"
+                  width="125"
+                  label="公司税率">
+              </el-table-column>
+              <el-table-column
                   prop="allianceTax"
                   width="200"
                   label="联盟税收">
@@ -87,7 +93,7 @@
               </el-table-column>
               <el-table-column
                   prop="paidInfo"
-                  width="300"
+                  width="200"
                   label="缴纳条">
               </el-table-column>
               <el-table-column
@@ -253,9 +259,9 @@ export default {
         });
       },
       tableRowClassName({row, rowIndex}) {
-        if (row.papAvg < 3) {
-          return 'danger-row'
-        }
+        // if (row.papAvg < 3) {
+        //   return 'danger-row'
+        // }
         if (!row.allianceTaxPaid) {
           return 'warning-row';
         }
