@@ -27,10 +27,10 @@
             <a href="#" @click="eve_switch_dcgspap()" v-bind:class="{ bgc: clickli === 5 }"
               v-show="this.$store.state.admin == true">DC联盟公司PAP平均排行</a>
           </li>
-          <li>
-            <a href="#" @click="eve_switch_gsqqzhucu()" v-bind:class="{ bgc: clickli === 3 }"
-              v-show="this.$store.state.admin == true">DC各公司详情</a>
-          </li>
+<!--          <li>-->
+<!--            <a href="#" @click="eve_switch_gsqqzhucu()" v-bind:class="{ bgc: clickli === 3 }"-->
+<!--              v-show="this.$store.state.admin == true">DC各公司详情</a>-->
+<!--          </li>-->
           <li>
             <a href="#" @click="eve_switch_gsseat()" v-bind:class="{ bgc: clickli === 4 }"
               v-show="this.$store.state.admin == true">公司seat注册情况</a>
@@ -56,11 +56,11 @@
     <!-- qq绑定弹出框 -->
     <el-dialog title="QQ绑定" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
       <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="QQ号码" prop="qq">
-          <el-input v-model="form.qq" placeholder="请输入qq号"></el-input>
+        <el-form-item label="QQ号码" prop="qqNumber">
+          <el-input v-model="form.qq" ></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入昵称"></el-input>
+        <el-form-item label="昵称" prop="nickName">
+          <el-input v-model="form.name" ></el-input>
         </el-form-item>
         <el-form-item label="角色名" prop="character">
           <el-input v-model="form.character" disabled></el-input>
@@ -75,10 +75,10 @@
     <el-dialog title="修改" :visible.sync="xdialogVisible" width="50%" :before-close="handleClose">
       <el-form :model="xform" :rules="xrules" ref="xformRef" label-width="100px" class="demo-ruleForm">
         <el-form-item label="QQ号码" prop="qqNumber">
-          <el-input v-model="xform.qqNumber" placeholder="请输入qq号"></el-input>
+          <el-input v-model="xform.qqNumber" ></el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="xform.nickName" placeholder="请输入昵称"></el-input>
+          <el-input v-model="xform.nickName" ></el-input>
         </el-form-item>
         <el-form-item label="角色名" prop="characterName">
           <el-input v-model="xform.characterName" disabled></el-input>
@@ -114,7 +114,7 @@ export default {
         characterName: '',
       },
       rules: {
-        qq: [
+        qqNumber: [
           { required: true, message: '请输入qq号', trigger: 'blur' },
           {
             validator: function (rule, value, callback) {
@@ -129,10 +129,32 @@ export default {
             trigger: "blur",
           }
         ],
-        name: [{ required: true, message: '请输入昵称', trigger: 'blur' },]
+        nickName: [
+          {
+            validator: function (rule, value, callback) {
+              const str = '[' + this.qqForm.corpTicker + ']' + value +'-' + this.qqForm.characterName;
+              const str_noNick = '[' + this.qqForm.corpTicker + ']' +'-' + this.qqForm.characterName;
+              // 使用正则表达式匹配中文字符
+              const chineseRegExp = /[\u4e00-\u9fa5]/g;
+              // 使用 replace 方法将中文字符替换为空字符串，并获取替换后的字符串长度
+              const replacedStr = str.replace(chineseRegExp, '');
+              // 计算字符串长度：中文字符算作 3 个字符，其他字符算作 1 个字符
+              const length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              if (str_noNick.length > 60) {
+                callback(new Error("游戏角色名过长,请在seat中选择其他角色作为主角色"));
+              } else if (length > 60) {
+                callback(new Error("昵称过长,请适当缩减"));
+              } else {
+                //校验通过
+                callback();
+              }
+            }.bind(this),
+            trigger: "blur",
+          }
+        ]
       },
       xrules: {
-        qq: [
+        qqNumber: [
           { required: true, message: '请输入qq号', trigger: 'blur' },
           {
             validator: function (rule, value, callback) {
@@ -147,7 +169,28 @@ export default {
             trigger: "blur",
           }
         ],
-        name: [{ required: true, message: '请输入昵称', trigger: 'blur' },]
+        nickName: [
+          {
+            validator: function (rule, value, callback) {
+              const str = '[' + this.qqForm.corpTicker + ']' + value +'-' + this.qqForm.characterName;
+              const str_noNick = '[' + this.qqForm.corpTicker + ']' +'-' + this.qqForm.characterName;
+              // 使用正则表达式匹配中文字符
+              const chineseRegExp = /[\u4e00-\u9fa5]/g;
+              // 使用 replace 方法将中文字符替换为空字符串，并获取替换后的字符串长度
+              const replacedStr = str.replace(chineseRegExp, '');
+              // 计算字符串长度：中文字符算作 3 个字符，其他字符算作 1 个字符
+              const length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              if (str_noNick.length > 60) {
+                callback(new Error("游戏角色名过长,请在seat中选择其他角色作为主角色"));
+              } else if (length > 60) {
+                callback(new Error("昵称过长,请适当缩减"));
+              } else {
+                //校验通过
+                callback();
+              }
+            }.bind(this),
+            trigger: "blur",
+          }]
       },
       clickli: 0,
       //判断是否为管理
@@ -267,17 +310,14 @@ export default {
       this.clickli = 2;
       this.$router.push('/corporatepap');
     },
-    eve_switch_gsqqzhucu() {
-      this.clickli = 3;
-      this.$router.push('/alliancegs')
-
-    },
+    // eve_switch_gsqqzhucu() {
+    //   this.clickli = 3;
+    //   this.$router.push('/alliancegs')
+    //
+    // },
     eve_switch_gsseat() {
       this.clickli = 4;
       this.$router.push('/seat')
-
-      //  this.getCookie();
-
     },
     eve_switch_dcgspap() {
       this.clickli = 5;
@@ -322,7 +362,6 @@ export default {
 
       }).catch(err => err)
       this.adminarr = res.data
-      console.log(this.adminarr);
       if (this.adminarr == null || this.adminarr.length == 0) {
         this.$store.state.admin = false
       } else {
@@ -333,13 +372,11 @@ export default {
   },
   created() {
     this.getCookie();
-
   },
   beforeMount() {
     this.getQQ();
   },
   mounted() {
-
     this.getadmin();
   },
 
