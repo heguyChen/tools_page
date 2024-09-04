@@ -2,7 +2,7 @@
   <div class="w">
     <div class="head">
       <div class="logo">
-        <a href="#" title="dc" @click="home()"></a>
+        <a href="/" title="dc" @click="home()"></a>
       </div>
       <div class="slogan">欢迎来到本网站</div>
       <el-button round class="btn" @click="dialogVisible = true" v-if="this.$store.state.bind">qq绑定</el-button>
@@ -11,33 +11,45 @@
         <el-button round class="btn1" @click="qqxiu">修改</el-button>
       </div>
     </div>
-    <div class="bar">
+    <div style="text-decoration-color: #02a6b5" class="bar">
       <div class="dc">
         <ul>
           <li>
-            <a href="#" @click="eve_switch_pap()" v-bind:class="{ bgc: clickli === 0 }">PAP个人详情</a>
+            <a style="cursor: pointer" @click="eve_switch_pap()" v-bind:class="{ bgc: clickli === 0 }">PAP个人详情</a>
           </li>
           <li>
-            <a href="#" @click="eve_switch_papph()" v-bind:class="{ bgc: clickli === 1 }">PAP个人排行</a>
+            <a style="cursor: pointer" @click="eve_switch_papph()" v-bind:class="{ bgc: clickli === 1 }">PAP个人排行</a>
           </li>
           <li>
-            <a href="#" @click="eve_switch_gspap()" v-bind:class="{ bgc: clickli === 2 }">公司内部PAP排行</a>
+            <a style="cursor: pointer" @click="eve_switch_gspap()" v-bind:class="{ bgc: clickli === 2 }">公司内部PAP排行</a>
           </li>
           <li>
-            <a href="#" @click="eve_switch_dcgspap()" v-bind:class="{ bgc: clickli === 5 }"
-              v-show="this.$store.state.admin == true">DC联盟公司PAP平均排行</a>
+            <a style="cursor: pointer" @click="eve_switch_dcgspap()" v-bind:class="{ bgc: clickli === 5 }"
+              v-show="this.squadArray.some(value => this.corpArray.includes(value))">DC联盟公司PAP平均排行</a>
           </li>
 <!--          <li>-->
 <!--            <a href="#" @click="eve_switch_gsqqzhucu()" v-bind:class="{ bgc: clickli === 3 }"-->
 <!--              v-show="this.$store.state.admin == true">DC各公司详情</a>-->
 <!--          </li>-->
           <li>
-            <a href="#" @click="eve_switch_gsseat()" v-bind:class="{ bgc: clickli === 4 }"
-              v-show="this.$store.state.admin == true">公司seat注册情况</a>
+            <a style="cursor: pointer" @click="eve_switch_gsseat()" v-bind:class="{ bgc: clickli === 4 }"
+              v-show="this.squadArray.some(value => this.corpArray.includes(value))">公司seat注册情况</a>
           </li>
           <li>
-            <a href="#" @click="alliance_report()" v-bind:class="{ bgc: clickli === 6 }"
-               v-show="this.$store.state.admin == true">公司实时月报</a>
+            <a style="cursor: pointer" @click="alliance_report()" v-bind:class="{ bgc: clickli === 6 }"
+               v-show="this.squadArray.some(value => this.corpArray.includes(value))">公司实时月报</a>
+          </li>
+          <li>
+            <a style="cursor: pointer" @click="auction()" v-bind:class="{ bgc: clickli === 7 }"
+               v-show="this.squadArray.some(value => this.corpArray.includes(value))">拍卖</a>
+          </li>
+          <li>
+            <a style="cursor: pointer" @click="auctionMoon()" v-bind:class="{ bgc: clickli === 8 }"
+               v-show="this.squadArray.some(value => this.moonArray.includes(value))">月矿数据</a>
+          </li>
+          <li>
+            <a style="cursor: pointer" @click="auctionSkyHook()" v-bind:class="{ bgc: clickli === 9 }"
+               v-show="this.squadArray.some(value => this.moonArray.includes(value))">天钩数据</a>
           </li>
         </ul>
       </div>
@@ -56,10 +68,10 @@
     <!-- qq绑定弹出框 -->
     <el-dialog title="QQ绑定" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
       <el-form :model="form" :rules="rules" ref="formRef" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="QQ号码" prop="qqNumber">
+        <el-form-item label="QQ号码" prop="qq">
           <el-input v-model="form.qq" ></el-input>
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
+        <el-form-item label="昵称" prop="name">
           <el-input v-model="form.name" ></el-input>
         </el-form-item>
         <el-form-item label="角色名" prop="character">
@@ -114,7 +126,7 @@ export default {
         characterName: '',
       },
       rules: {
-        qqNumber: [
+        qq: [
           { required: true, message: '请输入qq号', trigger: 'blur' },
           {
             validator: function (rule, value, callback) {
@@ -129,7 +141,7 @@ export default {
             trigger: "blur",
           }
         ],
-        nickName: [
+        name: [
           {
             validator: function (rule, value, callback) {
               const str = '[' + this.qqForm.corpTicker + ']' + value +'-' + this.qqForm.characterName;
@@ -139,7 +151,12 @@ export default {
               // 使用 replace 方法将中文字符替换为空字符串，并获取替换后的字符串长度
               const replacedStr = str.replace(chineseRegExp, '');
               // 计算字符串长度：中文字符算作 3 个字符，其他字符算作 1 个字符
-              const length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              let length;
+              if (str.match(chineseRegExp)) {
+                length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              } else {
+                length = replacedStr.length * 1;
+              }
               if (str_noNick.length > 60) {
                 callback(new Error("游戏角色名过长,请在seat中选择其他角色作为主角色"));
               } else if (length > 60) {
@@ -179,7 +196,12 @@ export default {
               // 使用 replace 方法将中文字符替换为空字符串，并获取替换后的字符串长度
               const replacedStr = str.replace(chineseRegExp, '');
               // 计算字符串长度：中文字符算作 3 个字符，其他字符算作 1 个字符
-              const length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              let length;
+              if (str.match(chineseRegExp)) {
+                length = replacedStr.length * 1 + str.match(chineseRegExp).length * 3;
+              } else {
+                length = replacedStr.length * 1;
+              }
               if (str_noNick.length > 60) {
                 callback(new Error("游戏角色名过长,请在seat中选择其他角色作为主角色"));
               } else if (length > 60) {
@@ -196,15 +218,19 @@ export default {
       //判断是否为管理
       adminid: [],
       adminarr: [],
+      squadArray: [],
+      corpArray: ['27','50'],
+      moonArray: ['34','43'],
+
       //get接口活动的表单
       qqForm: {},
       cookie: '',
       bar: 'Bearer',
       token: '',
       arr: [],
-      result: ''
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyIiwic3F1YWROYW1lIjpudWxsLCJhdXRob3JpdHkiOiIyIn0seyJzcXVhZElkIjoiMjMiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjIzIn0seyJzcXVhZElkIjoiMjciLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjI3In0seyJzcXVhZElkIjoiMzIiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjMyIn0seyJzcXVhZElkIjoiMzYiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjM2In1dLCJleHAiOjE3MDE5NDMyMTMsImNoYXJhY3RlcklkIjoyMTEzNzkxMzcxLCJqdGkiOiI1ODI1ZGE2Mi01OGJmLTRiYjgtODg5Ni1hMjQ0YzRlZGZhNDMiLCJjbGllbnRfaWQiOiJzZWF0LmRjLWV2ZSIsInVzZXJuYW1lIjoiQXBwbGUgUmVib3JuIn0.gAVO9OawBT8YhKBGp2yIIoDMNxibzY2xyZ0bSdFxp4eDM7ObDvlfluhGv1mGR8UJj8mg8DqqfpVQiBGYVVnqAyzx1-NqVnEstQtM_tLXNFfGYZd2lRkQOWWNv91-iFyhuKTjYgWhyzX5yMV2XlCdCg2s8VLOC_OsGhCpNFsVux7pkEw-uvvtZEF5282Lsm4OWXNNK1Kze4AAK6Eggupp4REaHHiZml7qvIYzeCtmqHUXuiItpGtFRls31WSWWydipn4pHwzwr0o21e-vswcyCL1IoWvZsVfLlxRkLndW_8DN4nECyH0qxcnbVSTz0WlbMoEKh6fvVd0KgZlqitSt5Q',
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyIiwic3F1YWROYW1lIjpudWxsLCJhdXRob3JpdHkiOiIyIn0seyJzcXVhZElkIjoiMjMiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjIzIn0seyJzcXVhZElkIjoiMjQiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjI0In0seyJzcXVhZElkIjoiMjciLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjI3In0seyJzcXVhZElkIjoiMzIiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjMyIn0seyJzcXVhZElkIjoiMzMiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjMzIn0seyJzcXVhZElkIjoiMzQiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjM0In0seyJzcXVhZElkIjoiMzYiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjM2In1dLCJleHAiOjE3MDI2NTExNzUsImNoYXJhY3RlcklkIjoyMTE0ODI1NzIwLCJqdGkiOiI1MjMyYmRlMS0wMDlhLTRhZGMtOTg2OC02NTZmODNhMThmMzEiLCJjbGllbnRfaWQiOiJzZWF0LmRjLWV2ZSIsInVzZXJuYW1lIjoiZGVhciBtdW11c2FuIn0.haoApPuld6lrDcgXX9v7TG1BcylxddK49MrNZ-e-fItI8yPwvIj3KwAOKQZuJP77vcmylQDY_OzADK3dOrsLMYRUOVH9aku-Ihcdw5nK4CDSEiSzo6InxfaAsRGfVIViQfMRim5DS7dml0r5YtqBD675TLvncCduIhkgvtQda20xKVKfT3MkhPXnfoNWqBqLZo8W7-Gmuk_6xaeNsvfgSlJQFfS_RvUdWna7e12lXtdT_7DuemZTefzvv7ZD4CKhVeKwet15qXbChHhG58oqZN41zWvWN9dIWYb6SadDH4XGmBcwDSSWyPFDkxOeX_4CQAqCk32mdwu0tYvpNFEAJw',
+      // result: '',
+      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifV0sImV4cCI6MTcyNTUxMDQ2MCwiY2hhcmFjdGVySWQiOjIxMTYzNjk0ODgsImp0aSI6ImI3YjBjNjExLWM0MWUtNDAyNS04OWNlLWIxZjNkZTQyZGE1MSIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJZTSBzYWt1cmEifQ.fvYndlMZn6LaawqSB0DcYT3nvzgtK_aa8-MVrxF_NdZCv9AhAw3wAQHU1gew_oI-8WOCYOEy4d8lbNOv6_IO9atit9S7__JJwUVSb1moSxq7O5cc2uGIS5CUqy6pc1YDo3pj6j055982dPCRIfJoQy16T50ZzOqFJfY4jQ-caj2gXkt1K3jw63bjRh6HP8NcS0qNynljl-9OnxX1JPKeL9AxECkwQTtAX2ugwDQBq7QsttTczfa6U7YYw3ArHc_RJmJs1z5dPiQZSwkejTM4wrJMqPkJyO_qvO5_2Wlmx9-Zc0sDjicLUNrrL3mO5h02Gwi9siBRSamz4UMDORhdCg',
+      result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNTUwNzk4NiwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6ImNmMDNiYWE1LWExYmQtNGZkNy1hNjA2LTdiNzIyOTI1YjIwZiIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.JkwAWgkZMKlSUns-MYfGNOt1ayh6ECwUY7sx_Z4JjGAB-0Zk209fOAMwsZbbUvmbY4fF_3897oYz0io2CoH_nsufaN6czg_XU24UvWlxkLHbPzy7BxdQu0FwXAOmGlEGme0XLBzNOGnlephjnE0q0Ven1v69gTYpR1vI-I-9-7uEG_Ajb1Q3POA84NBNPcC6Y5lh5SecMW0xncIorcp3K2ysdhE3FCta_kcVbPfeCUZMokmsLKYhqa8Ebp1p03yMt0z2tRKOiFMMysxaLdaaWgOIijiZs59DlnWn6QOF1C6MPSZmzk-aPSeoz4M80IPfwYm9dMq7CxSxbcHC9AMhoA'
     }
   },
   methods: {
@@ -226,7 +252,7 @@ export default {
 
       this.form.character = this.qqForm.characterName
 
-      this.getadmin();
+      // this.getadmin();
       if (res.data.qqNumber == 0) {
         this.$store.state.bind = true
       } else {
@@ -288,8 +314,17 @@ export default {
           })
 
           this.getQQ();
-          alert(res.message);
-          this.xdialogVisible = false;
+          if (res == null) {
+            alert("响应失败")
+          } else {
+            if (res.code == 500) {
+              alert(res.data)
+            } else {
+              alert(res.message);
+              this.xdialogVisible = false;
+            }
+          }
+          //
         } else {
           alert('请填写所有数据')
         }
@@ -327,8 +362,25 @@ export default {
     alliance_report() {
       this.clickli = 6;
       this.$router.push('/alliancereport')
-
     },
+    // 拍卖系统
+    auction: function () {
+      this.clickli = 7;
+      this.$router.push('/auction')
+    },
+
+    // 月矿数据
+    auctionMoon() {
+      this.clickli = 8;
+      this.$router.push('/auction_moon')
+    },
+
+    // 天钩数据
+    auctionSkyHook() {
+      this.clickli = 9;
+      this.$router.push('/auction_sky_hook')
+    },
+
     getCookie() {
       this.arr = document.cookie.split("; ")
       for (var i = 0; i < this.arr.length; i++) {
@@ -344,28 +396,19 @@ export default {
       }
     },
     //判断是不是管理
-    async getadmin() {
+    async getSquadInfo() {
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'https://tools.dc-eve.com/report/esi/corp',
+        url: 'http://localhost:8082/qq/bind/suqad/info',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
-        },
-        params: {
-          corpId: this.qqForm.corpId,
-          month: 10,
-          page: 1,
-          size: 10,
-          year: 2023,
         }
-
       }).catch(err => err)
-      this.adminarr = res.data
-      if (this.adminarr == null || this.adminarr.length == 0) {
-        this.$store.state.admin = false
+      if (res.code === 200) {
+        this.squadArray = res.data;
       } else {
-        this.$store.state.admin = true
+        this.$message.error(res.message);
       }
     }
 
@@ -377,7 +420,36 @@ export default {
     this.getQQ();
   },
   mounted() {
-    this.getadmin();
+    this.getSquadInfo();
+    switch (this.$route.path) {
+      case '/pap':
+        this.clickli = 0;
+        break;
+      case '/rankpap':
+        this.clickli = 1;
+        break;
+      case '/corporatepap':
+        this.clickli = 2;
+        break;
+      case '/seat':
+        this.clickli = 4;
+        break;
+      case '/dcpap':
+        this.clickli = 5;
+        break;
+      case '/alliancereport':
+        this.clickli = 6;
+        break;
+      case '/auction':
+        this.clickli = 7;
+        break;
+      case '/auction_moon':
+        this.clickli = 8;
+        break;
+      case '/auction_sky_hook':
+        this.clickli = 9;
+        break;
+    }
   },
 
 

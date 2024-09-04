@@ -47,6 +47,18 @@ const routes = [
         path: '/alliancereport',
         component: () => import(/* webpackChunkName: "about" */ '../views/allianceReport.vue')
       },
+      {
+        path: '/auction',
+        component: () => import(/* webpackChunkName: "about" */ '../views/auction.vue')
+      },
+      {
+        path: '/auction_moon',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AuctionMoon.vue')
+      },
+      {
+        path: '/auction_sky_hook',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AuctionSkyHook.vue')
+      },
     ]
   },
 ]
@@ -60,6 +72,7 @@ VueRouter.prototype.push = function push(location) {
 
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
