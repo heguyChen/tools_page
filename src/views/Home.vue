@@ -219,7 +219,7 @@ export default {
       adminid: [],
       adminarr: [],
       squadArray: [],
-      corpArray: ['27','50'],
+      corpArray: ['27','50','53'],
       moonArray: ['34','43'],
 
       //get接口活动的表单
@@ -228,9 +228,15 @@ export default {
       bar: 'Bearer',
       token: '',
       arr: [],
-      // result: '',
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifV0sImV4cCI6MTcyNTUxMDQ2MCwiY2hhcmFjdGVySWQiOjIxMTYzNjk0ODgsImp0aSI6ImI3YjBjNjExLWM0MWUtNDAyNS04OWNlLWIxZjNkZTQyZGE1MSIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJZTSBzYWt1cmEifQ.fvYndlMZn6LaawqSB0DcYT3nvzgtK_aa8-MVrxF_NdZCv9AhAw3wAQHU1gew_oI-8WOCYOEy4d8lbNOv6_IO9atit9S7__JJwUVSb1moSxq7O5cc2uGIS5CUqy6pc1YDo3pj6j055982dPCRIfJoQy16T50ZzOqFJfY4jQ-caj2gXkt1K3jw63bjRh6HP8NcS0qNynljl-9OnxX1JPKeL9AxECkwQTtAX2ugwDQBq7QsttTczfa6U7YYw3ArHc_RJmJs1z5dPiQZSwkejTM4wrJMqPkJyO_qvO5_2Wlmx9-Zc0sDjicLUNrrL3mO5h02Gwi9siBRSamz4UMDORhdCg',
-      result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNTUwNzk4NiwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6ImNmMDNiYWE1LWExYmQtNGZkNy1hNjA2LTdiNzIyOTI1YjIwZiIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.JkwAWgkZMKlSUns-MYfGNOt1ayh6ECwUY7sx_Z4JjGAB-0Zk209fOAMwsZbbUvmbY4fF_3897oYz0io2CoH_nsufaN6czg_XU24UvWlxkLHbPzy7BxdQu0FwXAOmGlEGme0XLBzNOGnlephjnE0q0Ven1v69gTYpR1vI-I-9-7uEG_Ajb1Q3POA84NBNPcC6Y5lh5SecMW0xncIorcp3K2ysdhE3FCta_kcVbPfeCUZMokmsLKYhqa8Ebp1p03yMt0z2tRKOiFMMysxaLdaaWgOIijiZs59DlnWn6QOF1C6MPSZmzk-aPSeoz4M80IPfwYm9dMq7CxSxbcHC9AMhoA'
+      /**
+       * 第四个最新
+       * 第三个测试admin
+       * 第二个测试公司管理
+       */
+      result: '',
+      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyMSIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjEifV0sImV4cCI6MTcyNTY5NTU4OSwiY2hhcmFjdGVySWQiOjIxMTkyMDA0NjAsImp0aSI6ImUzMjYzMWU4LWMzYWItNDAyMi05MjA0LTAwMTExZjhmN2VhZCIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJYUyBvbmlsaW5lIn0.SJwuMRLBEfS0QXW7aMyenDWLRjYebLKCCGwCgsRsaBk5a4BnDWIhznd7NdEKbj8xRxn66qzywqnqEkc1nJ0h9M8jFCc1FsniIYWIHubpQthuPo80q-i1KmGHtrdgphLL0uvPDo1UwsNys7f1Hq-dKZbvOaPX986lFd72TpH5lvKefeaz5o1BenL4W-lxu6vkFVhTsckG3xDqCs5KITCcTkVYnOw2U2pE_qfEegm_u15TnFptNZSED3GskWKarZJKGQdiGjvQAULNeiY5bIJByYMlC-2pAZPVONznVlQX86HqYEjDb2R6sTrq5-c1_zKyOFXIDvBsjRkuo9c3hdAZ7Q',
+      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifV0sImV4cCI6MTcyNTY5MTE2OSwiY2hhcmFjdGVySWQiOjIxMTYzNjk0ODgsImp0aSI6IjYwOWM4YWMzLWRkM2MtNGQ5Mi1iNTEzLTYzMDFkMjVkMGJkMiIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJZTSBzYWt1cmEifQ.SIew0HGZvqIbfx8eR57D7W0EzyyfCcVfZolFUtAiZc_HCoOKSiPw7Nfl0NEKu2gYBKhbC-Vo2FDzt__f77QWARtRq5jUrRVjlAdugo-C5laWPgBDPjtx52WnwSsbZ3aRJb-1T3jzLY2IxhAxuj6U6daTHGm-DnByVIhSRcqyKDizpYS-3wiT9gA06sqBYV05Dn6ZGcqOMfq47XsD0vLmgVFsTaQCEMsw0sA1JwKiLZGKyj-36-H7ickUamphq9bAf3ZYFzH_buP9V3WxURendCtJRPmHNPCquXc9vbNatV-UhJ7PxfUeg7u4PrBQKzZqPrxme1CvPZW1VvkUtDg4rA',
+      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNjA1MDgzMSwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6IjVjZmFlZWU1LWNmYzQtNDhhMS1iNTgxLTBhZDIwMzU5MjRhOCIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.BXSM5l-epfTw7XsZHy4RjnGZD11ria217BN58goV-Ll-rHa6w5Y1_rrhvoi6w-5AAmbV_8ldnJOaf95HSXAfVD16fui3SfAKfq62KP05VYGg3oYkpKt6MXWn8KcP-bmSiXWTQ8Cy-ael5g9Vhsfcab4QaV_T0kSIvEmCZgi6dR_cX5KZkYalt2nCEoL2cfp2ct58L6PLw7iZLOqF4yU3MLIrzgMaaePkIRa3iNmF6lSo8fbziz1afn32-02D5bAUTdZwkN58P0JYwHKn9s6y7WPFqEsc7Dxc2bCFTZG8BnFoVhd69dXQD11dkrbcwd41UnRrCsHDUcQi8wXoVul4NQ'
     }
   },
   methods: {
@@ -399,7 +405,7 @@ export default {
     async getSquadInfo() {
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'http://localhost:8082/qq/bind/suqad/info',
+        url: 'https://tools.dc-eve.com/qq/bind/squad/info',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -407,6 +413,8 @@ export default {
       }).catch(err => err)
       if (res.code === 200) {
         this.squadArray = res.data;
+        this.$store.userRole = res.data;
+
       } else {
         this.$message.error(res.message);
       }
@@ -420,7 +428,8 @@ export default {
     this.getQQ();
   },
   mounted() {
-    this.getSquadInfo();
+    // this.getSquadInfo();
+    this.squadArray = sessionStorage.getItem('userRole').split(",");
     switch (this.$route.path) {
       case '/pap':
         this.clickli = 0;
@@ -448,6 +457,9 @@ export default {
         break;
       case '/auction_sky_hook':
         this.clickli = 9;
+        break;
+      case '/no-permission':
+        // this.clickli = 9;
         break;
     }
   },

@@ -60,7 +60,7 @@ export default {
     },
     // 星域下拉查询
     corpSelectList() {
-      axios.get('http://localhost:8082/qq/auction/corp/list', {
+      axios.get('https://tools.dc-eve.com/qq/auction/corp/list', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -70,7 +70,7 @@ export default {
             this.options.corp = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
     cancel() {
@@ -100,11 +100,11 @@ export default {
               this.$emit('update:visible', false);
               this.$emit('save');
             } else {
-              this.$message.error(response.data.message);
+              this.$message.error(response.data.data);
             }
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
   },

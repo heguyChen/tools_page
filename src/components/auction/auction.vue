@@ -74,15 +74,30 @@
         <el-row :gutter="1">
           <el-col :span="4">
             <div class="grid-content bg-purple">
+              <el-form-item label="分类">
+                <el-select
+                    multiple
+                    collapse-tags
+                    v-model="formData.itemCategory" >
+                  <el-option label="手动月矿" value="手动月矿"></el-option>
+                  <el-option label="自动月矿" value="自动月矿"></el-option>
+                  <el-option label="天钩" value="天钩"></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <div class="grid-content bg-purple">
               <el-form-item label="状态">
                 <el-select
                     multiple
                     collapse-tags
                     v-model="formData.auctionStatus" >
-                  <el-option label="未开始" value="0"></el-option>
-                  <el-option label="进行中" value="1"></el-option>
+                  <el-option v-show="isMoonAdmin" label="未开始" value="0"></el-option>
+                  <el-option label="拍卖中" value="1"></el-option>
                   <el-option label="已结束" value="2"></el-option>
                   <el-option label="已交付" value="3"></el-option>
+                  <el-option label="拍卖核算中" value="4"></el-option>
                 </el-select>
               </el-form-item>
             </div>
@@ -90,21 +105,36 @@
           <el-col :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-button type="primary" @click="clear()">清空</el-button>
+                <el-button type="primary" @click="query()">查询</el-button>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-button type="primary" @click="list()">查询</el-button>
+                <el-button  @click="clear()">清空</el-button>
               </el-form-item>
             </div>
           </el-col>
-          <el-col :span="2">
+
+
+        </el-row>
+        <el-row>
+          <el-col
+              v-show="isMoonAdmin"
+              :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-button type="primary" @click="list()">查询</el-button>
+                <el-button icon="el-icon-video-play" type="primary" @click="start()">批量启动</el-button>
+              </el-form-item>
+            </div>
+          </el-col>
+          <el-col
+              v-show="isMoonAdmin"
+              :span="2">
+            <div class="grid-content bg-purple">
+              <el-form-item>
+                <el-button icon="el-icon-delete" type="primary" @click="del()">批量删除</el-button>
               </el-form-item>
             </div>
           </el-col>
@@ -119,6 +149,10 @@
           stripe
           @selection-change="handleSelectionChange"
           style="width: 100%">
+        <el-table-column
+            type="selection"
+            width="50">
+        </el-table-column>
         <el-table-column
             class-name="center-align"
             prop="itemCategory"
@@ -149,22 +183,16 @@
             label="星系"
             width="100">
         </el-table-column>
-<!--        <el-table-column-->
-<!--            class-name="center-align"-->
-<!--            prop="sourceLevel"-->
-<!--            label="等级"-->
-<!--            width="50">-->
-<!--        </el-table-column>-->
         <el-table-column
             show-overflow-tooltip
             prop="itemDetail"
             label="商品明细"
-            width="470">
+            width="320">
         </el-table-column>
         <el-table-column
             prop="startPrice"
             label="系统起拍价"
-            width="150">
+            width="140">
           <template slot="header" slot-scope="scope">
             系统起拍价
             <el-tooltip placement="top">
@@ -181,9 +209,17 @@
         </el-table-column>
         <el-table-column
             class-name="center-align"
-            prop="currentPrice"
+            prop="startTime"
+            label="拍卖时间"
+            width="160">
+        </el-table-column>
+        <el-table-column
+            prop="auctionInfo"
             label="拍卖信息"
             width="200">
+          <template slot-scope="scope">
+            <div style="white-space: pre-line;">{{ scope.row.auctionInfo }}</div>
+          </template>
         </el-table-column>
         <el-table-column
             class-name="center-align"
@@ -194,15 +230,38 @@
         <el-table-column
             class-name="center-align"
             label="操作"
-            width="159">
+            width="109">
           <template slot-scope="scope">
-            <el-button v-show="isMoonAdmin" @click="start(scope.row)" type="text" size="small">启动</el-button>
-            <el-button v-show="canAuction(scope.row)" @click="auction(scope.row)" type="text" size="small">拍卖</el-button>
-            <el-button v-show="isMoonAdmin" @click="del(scope.row)" type="text" size="small">删除</el-button>
+            <el-tooltip content="启动" placement="top" effect="light">
+              <el-button
+                  v-show="scope.row.auctionStatus == '未开始'"
+                  @click="start(scope.row)"
+                  type="text" icon="el-icon-video-play" size="medium" label="123"></el-button>
+            </el-tooltip>
+            <el-tooltip content="竞拍" placement="top" effect="light">
+              <el-button
+                  v-show="scope.row.auctionStatus == '拍卖中'"
+                  @click="auctionShow(scope.row)"
+                  type="text" icon="el-icon-s-check" size="medium" label="123"></el-button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top" effect="light">
+              <el-button
+                  v-show="isMoonAdmin"
+                  @click="del(scope.row)"
+                  type="text"
+                  icon="el-icon-delete"
+                  size="medium"
+                  label="123"></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
-
       </el-table>
+
+      <auction-input
+          :visible.sync="dialogVisible"
+          :rowData="currentRow"
+          @save="list"
+      ></auction-input>
     </div>
     <!-- 分页器 -->
     <el-pagination
@@ -221,20 +280,16 @@
 <script>
 import moment from "moment";
 import axios from 'axios';
+// import marked from "marked";
+import AuctionInput from '@/components/auction/AuctionInput.vue'
 
 export default {
+  components: {AuctionInput},
   methods: {
     // 拍卖请求
     clear() {
       this.formData = {};
 
-    },
-    canAuction(row) {
-      if (row.auctionStatus == 1) {
-        return true;
-      } else {
-        return false;
-      }
     },
 
     // 监听3个下拉的变化
@@ -260,7 +315,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/region/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -270,7 +325,7 @@ export default {
             this.options.region = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -280,7 +335,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/constellation/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -290,7 +345,7 @@ export default {
             this.options.constellation = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -300,7 +355,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/system/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -310,8 +365,13 @@ export default {
             this.options.system = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
+    },
+
+    query() {
+      this.currentPage = 1;
+      this.list();
     },
 
     // 分页查询
@@ -323,10 +383,11 @@ export default {
         constellationId: this.formData.constellation,
         regionId: this.formData.region,
         auctionStatus: this.formData.auctionStatus,
+        category: this.formData.itemCategory,
         page: this.currentPage,
         size: this.pageSize
       }
-      axios.post('http://localhost:8082/qq/auction/page',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -338,11 +399,15 @@ export default {
               this.total = response.data.data.total;
               this.currentPage = response.data.data.page;
               this.pageSize = response.data.data.size;
+            } else {
+
+              this.$message.error(response.data.data);
             }
             this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
+            this.loading = false;
           });
     },
     handleSizeChange(newSize) {
@@ -356,22 +421,27 @@ export default {
     handleSelectionChange(selected) {
       this.selectedData = selected;
     },
-    auction(row) {
+
+    start(row) {
       let params = [];
       if (row) {
-        if (row.moonStatus != '空闲中') {
-          this.$message.warning('请选择状态为空闲中的月矿');
+        if (row.auctionStatus != '未开始') {
+          this.$message.warning('请选择状态为未开始的物品');
           return ;
         }
-        params.push({moonId: row.moonId});
+        params.push({
+          id: row.id,
+          auctionStatus: 1
+        });
       } else {
-        if (this.selectedData.some(item => item.moonStatus !== '空闲中')) {
-          this.$message.warning('请选择状态为空闲中的月矿');
+        if (this.selectedData.some(item => item.auctionStatus !== '未开始')) {
+          this.$message.warning('请选择状态为未开始的物品');
           return ;
         }
         params = this.selectedData.map(item => {
           return {
-            moonId: item.moonId
+            id: item.id,
+            auctionStatus: 1
           }
         });
       }
@@ -380,7 +450,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('http://localhost:8082/qq/auction/moon/submit',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/change',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -388,15 +458,54 @@ export default {
       })
           .then(response => {
             if (response.data.code === 200) {
-              this.$message.success('月矿拍卖提交成功');
+              this.$message.success('物品启动拍卖');
               this.list();
             } else {
-              this.$message.error(response.data.message);
+              this.$message.error(response.data.data);
             }
+            this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
+            this.loading = false;
           });
+    },
+
+    auctionShow(row) {
+      let params = [];
+      if (row) {
+        if (row.auctionStatus != '拍卖中') {
+          this.$message.warning('请选择状态为拍卖中的物品');
+          return ;
+        }
+        params.push({
+          id: row.id
+        });
+      }
+      if (params.length == 0){
+        this.$message.warning('请至少选择一条数据');
+        return ;
+      }
+      this.currentRow = row;
+      this.dialogVisible = true; // 显示弹出框
+      // this.loading = true;
+      // axios.post('https://tools.dc-eve.com/qq/auction/submit',params, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': sessionStorage.getItem("token"),
+      //   },
+      // })
+      //     .then(response => {
+      //       if (response.data.code === 200) {
+      //         this.$message.success('月矿拍卖提交成功');
+      //         this.list();
+      //       } else {
+      //         this.$message.error(response.data.data);
+      //       }
+      //     })
+      //     .catch(error => {
+      //       this.$message.error(error);
+      //     });
     },
 
     del(row) {
@@ -415,7 +524,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('http://localhost:8082/qq/auction/del',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/del',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -426,43 +535,18 @@ export default {
               this.$message.success('拍卖删除成功');
               this.list();
             } else {
-              this.$message.error(response.data.message);
+              this.$message.error(response.data.data);
             }
+            this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
-          });
-    },
-
-    changeType() {
-      const params = this.selectedData.map(item => {
-        return {
-          moonId: item.moonId,
-          isAuto: !item.isAuto
-        }
-      });
-      axios.post('http://localhost:8082/qq/auction/moon/change',params, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem("token"),
-        },
-      })
-          .then(response => {
-            if (response.data.code === 200) {
-              this.$message.success('月矿类型切换成功');
-              this.list();
-            } else {
-              this.$message.error(response.data.message);
-            }
-          })
-          .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
     //判断是不是管理
     getSquadInfo() {
-      axios.get('http://localhost:8082/qq/bind/suqad/info', {
+      axios.get('https://tools.dc-eve.com/qq/bind/squad/info', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -472,11 +556,11 @@ export default {
             if (response.data.code === 200) {
               this.isMoonAdmin = response.data.data.some(value => this.moonArray.includes(value));
             } else {
-              this.$message.error(response.data.message);
+              this.$message.error(response.data.data);
             }
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
   },
@@ -489,7 +573,8 @@ export default {
         constellation: [],
         region: [],
         itemName: '',
-        auctionStatus: []
+        auctionStatus: [],
+        itemCategory: ''
       },
       options : {
         region:[],
@@ -505,6 +590,9 @@ export default {
       // 总条数
       total: 0,
       selectedData: [],
+      dialogVisible: false,
+      currentRow: {}
+
     }
   },
   mounted() {

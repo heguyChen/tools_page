@@ -208,7 +208,7 @@
       <edit-dialog
           :visible.sync="dialogVisible"
           :rowData="selectedData"
-          :url="'http://localhost:8082/qq/auction/skyHook/change'"
+          :url="'https://tools.dc-eve.com/qq/auction/skyHook/change'"
           @save="list"
       ></edit-dialog>
     </div>
@@ -279,7 +279,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/skyHook/region/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -289,7 +289,7 @@ export default {
             this.options.region = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -299,7 +299,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/skyHook/constellation/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -309,7 +309,7 @@ export default {
             this.options.constellation = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -319,7 +319,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/skyHook/system/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -329,7 +329,7 @@ export default {
             this.options.system = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -339,6 +339,7 @@ export default {
         params.push({
           planetId: row.planetId,
         });
+        this.selectedData = params;
       } else {
         params = this.selectedData.map(item => {
           return {
@@ -350,6 +351,7 @@ export default {
         this.$message.warning('请至少选择一条数据');
         return ;
       }
+
       this.dialogVisible = true; // 显示弹出框
 
     },
@@ -371,7 +373,7 @@ export default {
         page: this.currentPage,
         size: this.pageSize
       }
-      axios.post('http://localhost:8082/qq/auction/skyHook/page',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -387,7 +389,7 @@ export default {
             this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
             this.loading = false;
           });
     },
@@ -426,7 +428,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('http://localhost:8082/qq/auction/skyHook/submit',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/submit',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -442,7 +444,7 @@ export default {
             this.loading = true;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
             this.loading = true;
           });
     },

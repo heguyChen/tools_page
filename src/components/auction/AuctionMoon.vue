@@ -160,6 +160,7 @@
           :data="tableData"
           border
           stripe
+          @sort-change="sortChange"
           @selection-change="handleSelectionChange"
           style="width: 100%">
         <el-table-column
@@ -203,14 +204,14 @@
             width="350">
         </el-table-column>
         <el-table-column
-            sortable
+            sortable="custom"
             :formatter="formatNumber"
             prop="sourcePrice"
             label="估价"
             width="130">
         </el-table-column>
         <el-table-column
-            sortable
+            sortable="custom"
             :formatter="formatNumber"
             prop="sourceTax"
             label="税金"
@@ -263,7 +264,7 @@
       <edit-dialog
           :visible.sync="dialogVisible"
           :rowData="selectedData"
-          :url="'http://localhost:8082/qq/auction/moon/change'"
+          :url="'https://tools.dc-eve.com/qq/auction/moon/change'"
           @save="list"
       ></edit-dialog>
     </div>
@@ -306,6 +307,7 @@ export default {
       this.constellationSelectList();
       this.systemSelectList();
     },
+
     formatNumber(row, column, cellValue) {
       if (!cellValue) return '';
       return cellValue.toLocaleString(); // 使用千位分隔符格式化数字
@@ -334,7 +336,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/moon/region/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -344,7 +346,7 @@ export default {
             this.options.region = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -354,7 +356,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/moon/constellation/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -364,7 +366,7 @@ export default {
             this.options.constellation = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -374,7 +376,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('http://localhost:8082/qq/auction/moon/system/list',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -384,7 +386,7 @@ export default {
             this.options.system = response.data.data;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
           });
     },
 
@@ -405,9 +407,11 @@ export default {
         isAuto: this.formData.isAuto,
         moonStatus: this.formData.moonStatus,
         page: this.currentPage,
-        size: this.pageSize
+        size: this.pageSize,
+        isAsc: this.formData.order,
+        orderCol: this.formData.orderCol,
       }
-      axios.post('http://localhost:8082/qq/auction/moon/page',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -423,7 +427,7 @@ export default {
             this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
             this.loading = false;
           });
     },
@@ -438,7 +442,21 @@ export default {
     handleSelectionChange(selected) {
       this.selectedData = selected;
     },
-
+    sortChange(param) {
+      if (param.order && param.order === 'ascending') {
+        this.formData.order = true;
+      } else if (param.order && param.order === 'descending') {
+        this.formData.order = false;
+      } else {
+        this.formData.order = null;
+      }
+      if (param.prop && param.prop === 'sourcePrice') {
+        this.formData.orderCol = 'source_price';
+      } else if (param.prop && param.prop === 'sourceTax') {
+        this.formData.orderCol = 'source_tax';
+      }
+      this.list();
+    },
     editShow(row) {
       let params = [];
       if (row) {
@@ -446,6 +464,7 @@ export default {
           moonId: row.moonId,
           isAuto: !row.isAuto
         });
+        this.selectedData = params;
       } else {
         params = this.selectedData.map(item => {
           return {
@@ -458,6 +477,7 @@ export default {
         this.$message.warning('请至少选择一条数据');
         return ;
       }
+
       this.dialogVisible = true; // 显示弹出框
     },
 
@@ -485,7 +505,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('http://localhost:8082/qq/auction/moon/submit',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/submit',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -501,10 +521,11 @@ export default {
             this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
             this.loading = false;
           });
     },
+
     changeType(row) {
       let params = [];
       if (row) {
@@ -533,7 +554,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('http://localhost:8082/qq/auction/moon/change',params, {
+      axios.post('https://tools.dc-eve.com/qq/auction/moon/change',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -549,7 +570,7 @@ export default {
             this.loading = false;
           })
           .catch(error => {
-            console.error('Error fetching items:', error);
+            this.$message.error(error);
             this.loading = false;
           });
     }
@@ -564,7 +585,9 @@ export default {
         moonName: '',
         level: [],
         isAuto: '',
-        moonStatus: []
+        moonStatus: [],
+        order: '',
+        orderCol: '',
       },
       options : {
         region:[],
