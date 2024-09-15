@@ -68,7 +68,7 @@ const routes = [
       {
         path: '/auction',
         component: () => import(/* webpackChunkName: "about" */ '../views/auction.vue'),
-        meta: { roles: ['27', '34', '43', '53'] }
+        meta: { roles: ['27', '29', '34', '43', '53'] }
       },
       {
         path: '/auction_moon',
@@ -102,21 +102,22 @@ const router = new VueRouter({
 })
 
 let response;
+let ip;
 let userRole;
 try {
+  ip = await axios.get('https://api.ipify.org/?format=json');
+  sessionStorage.setItem('ip', ip.data.ip);
   response = await axios.get('https://tools.dc-eve.com/qq/bind/squad/info', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem("token"),
+      'Ip': sessionStorage.getItem("ip"),
     }
   });
   userRole = response.data.data;
   sessionStorage.setItem('userRole', userRole);
 } catch (error) {
   router.push({ path: '/no-permission' });
-  // throw error;
-  // window.location.href = '/error-page.html';
-  // next({ path: '/no-permission' });
 }
 
 

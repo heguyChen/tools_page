@@ -219,7 +219,7 @@ export default {
       adminid: [],
       adminarr: [],
       squadArray: [],
-      corpArray: ['27','50','53'],
+      corpArray: ['27','29', '50','53'],
       moonArray: ['34','43'],
 
       //get接口活动的表单
@@ -283,6 +283,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem("token"),
+              'Ip': sessionStorage.getItem("ip"),
             },
             data: this.qqForm
           })
@@ -315,6 +316,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem("token"),
+              'Ip': sessionStorage.getItem("ip"),
             },
             data: this.qqForm
           })

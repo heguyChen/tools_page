@@ -184,7 +184,6 @@
             width="100">
         </el-table-column>
         <el-table-column
-            show-overflow-tooltip
             prop="itemDetail"
             label="商品明细"
             width="320">
