@@ -314,7 +314,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/region/list',params, {
+      axios.post(this.url + '/qq/auction/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -334,7 +334,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/constellation/list',params, {
+      axios.post(this.url + '/qq/auction/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -354,7 +354,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/system/list',params, {
+      axios.post(this.url + '/qq/auction/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -386,7 +386,7 @@ export default {
         page: this.currentPage,
         size: this.pageSize
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/page',params, {
+      axios.post(this.url + '/qq/auction/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -449,7 +449,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/change',params, {
+      axios.post(this.url + '/qq/auction/change',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -488,7 +488,7 @@ export default {
       this.currentRow = row;
       this.dialogVisible = true; // 显示弹出框
       // this.loading = true;
-      // axios.post('https://tools.dc-eve.com/qq/auction/submit',params, {
+      // axios.post(this.url + '/qq/auction/submit',params, {
       //   headers: {
       //     'Content-Type': 'application/json',
       //     'Authorization': sessionStorage.getItem("token"),
@@ -523,7 +523,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/del',params, {
+      axios.post(this.url + '/qq/auction/del',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -545,7 +545,7 @@ export default {
 
     //判断是不是管理
     getSquadInfo() {
-      axios.get('https://tools.dc-eve.com/qq/bind/squad/info', {
+      axios.get(this.url + '/qq/bind/squad/info', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -590,7 +590,8 @@ export default {
       total: 0,
       selectedData: [],
       dialogVisible: false,
-      currentRow: {}
+      currentRow: {},
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
 
     }
   },

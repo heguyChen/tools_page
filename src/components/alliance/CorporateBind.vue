@@ -63,11 +63,6 @@
                     </el-table-column>
                     <el-table-column prop="characterName" label="角色名" sortable width="200">
                     </el-table-column>
-                    <!-- <el-table-column label="公司标志">
-                        <template slot-scope="scope">
-                            <el-image style="width: 100px; height: 100px" :src="urls"></el-image>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="corpName" label="公司名" width="150">
                     </el-table-column>
                     <el-table-column prop="corpTicker" label="公司缩写" width="150">
@@ -78,11 +73,6 @@
                             <el-button type="success" v-show="scope.row.tokenStatus == true">seat已绑定</el-button>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column prop="qqBind" label="qq绑定" width="450">
-                    <template slot-scope="scope">
-                        <span> {{ scope.row.qqBind }}</span>
-                    </template>
-                </el-table-column> -->
                 </el-table>
             </el-card>
         </el-card>
@@ -123,9 +113,7 @@ export default {
             //seat接受seat子角色
             seatForm: [],
             seatshow: false,
-            //图片地址
-            url: 'https://images.evetech.net/types',
-            urls: '',
+            url: process.env.VUE_APP_API_BASE_URL_REPORT,
         }
     },
     methods: {
@@ -137,10 +125,7 @@ export default {
         },
         seeRow(rows) {
             this.seatForm = rows.groupList
-            // console.log(rows);
             this.seatshow = true;
-            // console.log(this.seatForm);
-            // this.urls = this.url.concat("/", this.seatForm.corpId, '/logo')
         },
         papTime() {
             this.month = moment(this.time).format("MM");
@@ -192,7 +177,7 @@ export default {
             this.papTime();
             const { data: res } = await this.$http({
                 method: 'get',
-                url: 'https://tools.dc-eve.com/report/esi/corp',
+                url: this.url + '/report/esi/corp',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': sessionStorage.getItem("token"),

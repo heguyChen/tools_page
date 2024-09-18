@@ -38,6 +38,7 @@ export default {
     return {
       inputValue: "", // 存储实际的数字值
       loading: false,
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
     };
   },
   computed: {
@@ -88,7 +89,7 @@ export default {
         price: this.inputValue
       };
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/submit',params, {
+      axios.post(this.url + '/qq/auction/submit',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),

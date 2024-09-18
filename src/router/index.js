@@ -1,17 +1,44 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
-// import {asyncRequest, syncRequest} from '@/assets/js/request.js'
 Vue.use(VueRouter)
+function fetchJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    const callbackName = 'handleResponse_' + Math.random().toString(36).substr(2, 9);
+
+    // 定义回调函数
+    window[callbackName] = function(data) {
+      resolve(data); // 将 JSONP 数据作为 Promise 的结果返回
+      delete window[callbackName]; // 清理全局回调函数
+      document.body.removeChild(script); // 执行完后移除 script 标签
+    };
+
+    script.src = `${url}?callback=${callbackName}`;
+    script.onerror = reject; // 如果加载出错，拒绝 Promise
+    document.body.appendChild(script);
+  });
+}
+
+async function main() {
+  try {
+    const data = await fetchJsonp('https://api.ip.sb/jsonip');
+    sessionStorage.setItem("ip", data.ip);
+  } catch (error) {
+    console.error('获取数据时出错:', error);
+  }
+}
+
+main();
 
 for (const string of document.cookie.split("; ")) {
-  var arr1 = string.split("=")     //将名/值对以“=”分割开
+  let arr1 = string.split("=")     //将名/值对以“=”分割开
   if (arr1[0] == "tools_remember") {
     const result = arr1[1];  //如果名为name,则结果result为名对应的值
     const cookie = 'Bearer'.concat(" ", result);
     sessionStorage.setItem('token', cookie);
   } else {
-    // sessionStorage.setItem('token', 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNjA1MDgzMSwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6IjVjZmFlZWU1LWNmYzQtNDhhMS1iNTgxLTBhZDIwMzU5MjRhOCIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.BXSM5l-epfTw7XsZHy4RjnGZD11ria217BN58goV-Ll-rHa6w5Y1_rrhvoi6w-5AAmbV_8ldnJOaf95HSXAfVD16fui3SfAKfq62KP05VYGg3oYkpKt6MXWn8KcP-bmSiXWTQ8Cy-ael5g9Vhsfcab4QaV_T0kSIvEmCZgi6dR_cX5KZkYalt2nCEoL2cfp2ct58L6PLw7iZLOqF4yU3MLIrzgMaaePkIRa3iNmF6lSo8fbziz1afn32-02D5bAUTdZwkN58P0JYwHKn9s6y7WPFqEsc7Dxc2bCFTZG8BnFoVhd69dXQD11dkrbcwd41UnRrCsHDUcQi8wXoVul4NQ');
+    // sessionStorage.setItem('token', 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNjczODkyNCwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6IjhkM2MwYTZjLWEyN2EtNDMwZi05NzgwLTRmMzg5MGZiOTZlNiIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.eRzNJIuIZo1xKXR6oU3GASxxNldq0QY1VCrmYmMrXndDO-BPvkh7wqajkbnIsD12GK4nGcNxFtvUTK0u-gQLPKmoEBKVTEJvQCTW7f832abZD1JwrZVVBcztst6uI-J4LEkXpRL5I7TOMQslRy3A5N0zRRtkWRzt-rrgCpXfbmtobxVqSuRWFDQEbW-pMQnEsqM9_deU4R0xwM8KGCP1reoAqDr4etXVJAmO5bB8kY-hp7h_p_vFWQQ0M_BuUJNV4ayP77iQ8ojGwjC-TNu0_zyz8nD5HT6aZlQOfqyeeOX-Fe1zegR_QhuIRTqLnToDWypETcGxl750nDjVQADgug');
   }
 };
 
@@ -102,16 +129,15 @@ const router = new VueRouter({
 })
 
 let response;
-let ip;
+
 let userRole;
 try {
-  ip = await axios.get('https://api.ipify.org/?format=json');
-  sessionStorage.setItem('ip', ip.data.ip);
-  response = await axios.get('https://tools.dc-eve.com/qq/bind/squad/info', {
+  const url = process.env.VUE_APP_API_BASE_URL_QQ;
+  response = await axios.get(url + '/qq/bind/squad/info', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': sessionStorage.getItem("token"),
-      'Ip': sessionStorage.getItem("ip"),
+      'ip': sessionStorage.getItem("ip"),
     }
   });
   userRole = response.data.data;

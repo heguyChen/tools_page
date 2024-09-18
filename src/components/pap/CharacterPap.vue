@@ -107,7 +107,7 @@ export default {
         shipTypeId: '',
       },
       //图片地址
-      url: 'https://images.evetech.net/types',
+      img_url: 'https://images.evetech.net/types',
       urls: '',
       jsonData: [],
       title: 'pap总数',
@@ -131,14 +131,15 @@ export default {
       pap: [],
       //接受查看详情的对象
       xq: '',
-      characterId: ''
+      characterId: '',
+      url: process.env.VUE_APP_API_BASE_URL_REPORT,
     }
   },
   methods: {
     handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
-          this.url = 'https://images.evetech.net/types'
+          this.img_url = 'https://images.evetech.net/types'
           this.urls = ''
           done();
         })
@@ -153,7 +154,7 @@ export default {
       this.papTime();
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'https://tools.dc-eve.com/report/pap/character',
+        url: this.url + '/report/pap/character',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -215,7 +216,7 @@ export default {
       this.papTime();
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'https://tools.dc-eve.com/report/pap/characterList',
+        url: this.url + '/report/pap/characterList',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -235,7 +236,7 @@ export default {
       this.form = rows
       this.form.time = moment(this.form.time).format("YYYY-MM-DD HH:mm:ss");
       this.dialogVisible = true
-      this.urls = this.url.concat("/", this.form.shipTypeId, '/render')
+      this.urls = this.img_url.concat("/", this.form.shipTypeId, '/render')
     },
 
 

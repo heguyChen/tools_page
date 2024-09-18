@@ -228,15 +228,7 @@ export default {
       bar: 'Bearer',
       token: '',
       arr: [],
-      /**
-       * 第四个最新
-       * 第三个测试admin
-       * 第二个测试公司管理
-       */
-      result: '',
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyMSIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjEifV0sImV4cCI6MTcyNTY5NTU4OSwiY2hhcmFjdGVySWQiOjIxMTkyMDA0NjAsImp0aSI6ImUzMjYzMWU4LWMzYWItNDAyMi05MjA0LTAwMTExZjhmN2VhZCIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJYUyBvbmlsaW5lIn0.SJwuMRLBEfS0QXW7aMyenDWLRjYebLKCCGwCgsRsaBk5a4BnDWIhznd7NdEKbj8xRxn66qzywqnqEkc1nJ0h9M8jFCc1FsniIYWIHubpQthuPo80q-i1KmGHtrdgphLL0uvPDo1UwsNys7f1Hq-dKZbvOaPX986lFd72TpH5lvKefeaz5o1BenL4W-lxu6vkFVhTsckG3xDqCs5KITCcTkVYnOw2U2pE_qfEegm_u15TnFptNZSED3GskWKarZJKGQdiGjvQAULNeiY5bIJByYMlC-2pAZPVONznVlQX86HqYEjDb2R6sTrq5-c1_zKyOFXIDvBsjRkuo9c3hdAZ7Q',
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NjQ4MDYxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifV0sImV4cCI6MTcyNTY5MTE2OSwiY2hhcmFjdGVySWQiOjIxMTYzNjk0ODgsImp0aSI6IjYwOWM4YWMzLWRkM2MtNGQ5Mi1iNTEzLTYzMDFkMjVkMGJkMiIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJZTSBzYWt1cmEifQ.SIew0HGZvqIbfx8eR57D7W0EzyyfCcVfZolFUtAiZc_HCoOKSiPw7Nfl0NEKu2gYBKhbC-Vo2FDzt__f77QWARtRq5jUrRVjlAdugo-C5laWPgBDPjtx52WnwSsbZ3aRJb-1T3jzLY2IxhAxuj6U6daTHGm-DnByVIhSRcqyKDizpYS-3wiT9gA06sqBYV05Dn6ZGcqOMfq47XsD0vLmgVFsTaQCEMsw0sA1JwKiLZGKyj-36-H7ickUamphq9bAf3ZYFzH_buP9V3WxURendCtJRPmHNPCquXc9vbNatV-UhJ7PxfUeg7u4PrBQKzZqPrxme1CvPZW1VvkUtDg4rA',
-      // result: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JwSWQiOjk4NTQ3NzcxLCJzY29wZSI6WyJhbGwiXSwidXNlclNxdWFkcyI6W3sic3F1YWRJZCI6IjEiLCJzcXVhZE5hbWUiOm51bGwsImF1dGhvcml0eSI6IjEifSx7InNxdWFkSWQiOiIyNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjYifSx7InNxdWFkSWQiOiIyNyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMjcifSx7InNxdWFkSWQiOiIzMiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzIifSx7InNxdWFkSWQiOiIzMyIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzMifSx7InNxdWFkSWQiOiIzNCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzQifSx7InNxdWFkSWQiOiIzNiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiMzYifSx7InNxdWFkSWQiOiI0NCIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDQifSx7InNxdWFkSWQiOiI0NiIsInNxdWFkTmFtZSI6bnVsbCwiYXV0aG9yaXR5IjoiNDYifV0sImV4cCI6MTcyNjA1MDgzMSwiY2hhcmFjdGVySWQiOjIxMTQ4MjU3MjAsImp0aSI6IjVjZmFlZWU1LWNmYzQtNDhhMS1iNTgxLTBhZDIwMzU5MjRhOCIsImNsaWVudF9pZCI6InNlYXQuZGMtZXZlIiwidXNlcm5hbWUiOiJkZWFyIG11bXVzYW4ifQ.BXSM5l-epfTw7XsZHy4RjnGZD11ria217BN58goV-Ll-rHa6w5Y1_rrhvoi6w-5AAmbV_8ldnJOaf95HSXAfVD16fui3SfAKfq62KP05VYGg3oYkpKt6MXWn8KcP-bmSiXWTQ8Cy-ael5g9Vhsfcab4QaV_T0kSIvEmCZgi6dR_cX5KZkYalt2nCEoL2cfp2ct58L6PLw7iZLOqF4yU3MLIrzgMaaePkIRa3iNmF6lSo8fbziz1afn32-02D5bAUTdZwkN58P0JYwHKn9s6y7WPFqEsc7Dxc2bCFTZG8BnFoVhd69dXQD11dkrbcwd41UnRrCsHDUcQi8wXoVul4NQ'
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
     }
   },
   methods: {
@@ -247,7 +239,7 @@ export default {
       this.token = sessionStorage.getItem("token");
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'https://tools.dc-eve.com/qq/bind',
+        url: this.url + '/qq/bind',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -279,11 +271,11 @@ export default {
         if (validate) {
           const { data: res } = await this.$http({
             method: 'post',
-            url: 'https://tools.dc-eve.com/qq/bind',
+            url: this.url + '/qq/bind',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem("token"),
-              'Ip': sessionStorage.getItem("ip"),
+              'ip': sessionStorage.getItem("ip"),
             },
             data: this.qqForm
           })
@@ -312,11 +304,11 @@ export default {
         if (validate) {
           const { data: res } = await this.$http({
             method: 'post',
-            url: 'https://tools.dc-eve.com/qq/bind',
+            url: this.url + '/qq/bind',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem("token"),
-              'Ip': sessionStorage.getItem("ip"),
+              'ip': sessionStorage.getItem("ip"),
             },
             data: this.qqForm
           })
@@ -389,25 +381,25 @@ export default {
       this.$router.push('/auction_sky_hook')
     },
 
-    getCookie() {
-      this.arr = document.cookie.split("; ")
-      for (var i = 0; i < this.arr.length; i++) {
-        var arr1 = this.arr[i].split("=")     //将名/值对以“=”分割开
-        if (arr1[0] == "tools_remember") {
-          this.result = arr1[1];  //如果名为name,则结果result为名对应的值
-        }
-      }
-      this.cookie = this.bar.concat(" ", this.result);
-      sessionStorage.setItem('token', this.cookie);
-      if (this.cookie.length < 8) {
-        // window.location.replace("https://seat.dc-eve.com")
-      }
-    },
+    // getCookie() {
+    //   this.arr = document.cookie.split("; ")
+    //   for (var i = 0; i < this.arr.length; i++) {
+    //     var arr1 = this.arr[i].split("=")     //将名/值对以“=”分割开
+    //     if (arr1[0] == "tools_remember") {
+    //       this.result = arr1[1];  //如果名为name,则结果result为名对应的值
+    //     }
+    //   }
+    //   this.cookie = this.bar.concat(" ", this.result);
+    //   sessionStorage.setItem('token', this.cookie);
+    //   if (this.cookie.length < 8) {
+    //     // window.location.replace("https://seat.dc-eve.com")
+    //   }
+    // },
     //判断是不是管理
     async getSquadInfo() {
       const { data: res } = await this.$http({
         method: 'get',
-        url: 'https://tools.dc-eve.com/qq/bind/squad/info',
+        url: this.url + '/qq/bind/squad/info',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -424,7 +416,7 @@ export default {
 
   },
   created() {
-    this.getCookie();
+    // this.getCookie();
   },
   beforeMount() {
     this.getQQ();

@@ -54,6 +54,7 @@ export default {
 
             //接受pap总数统计的数组
             pap: [],
+            url: process.env.VUE_APP_API_BASE_URL_REPORT,
         }
     },
     methods: {
@@ -109,7 +110,7 @@ export default {
             this.papTime();
             const { data: res } = await this.$http({
                 method: 'get',
-                url: 'https://tools.dc-eve.com/report/pap/alliance',
+                url: this.url + '/report/pap/alliance',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': sessionStorage.getItem("token"),

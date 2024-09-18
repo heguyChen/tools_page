@@ -264,7 +264,7 @@
       <edit-dialog
           :visible.sync="dialogVisible"
           :rowData="selectedData"
-          :url="'https://tools.dc-eve.com/qq/auction/moon/change'"
+          :param_url="this.url + '/qq/auction/moon/change'"
           @save="list"
       ></edit-dialog>
     </div>
@@ -336,7 +336,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/region/list',params, {
+      axios.post(this.url + '/qq/auction/moon/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -356,7 +356,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/constellation/list',params, {
+      axios.post(this.url + '/qq/auction/moon/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -376,7 +376,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/system/list',params, {
+      axios.post(this.url + '/qq/auction/moon/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -411,7 +411,7 @@ export default {
         isAsc: this.formData.order,
         orderCol: this.formData.orderCol,
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/page',params, {
+      axios.post(this.url + '/qq/auction/moon/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -505,7 +505,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/submit',params, {
+      axios.post(this.url + '/qq/auction/moon/submit',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -554,7 +554,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/moon/change',params, {
+      axios.post(this.url + '/qq/auction/moon/change',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -604,6 +604,7 @@ export default {
       // 总条数
       total: 0,
       selectedData: [],
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
     }
   },
   mounted() {

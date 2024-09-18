@@ -145,7 +145,8 @@ export default {
             //接受pap总数统计的数组
             pap: [],
             loading: true,
-            isAdminFlag: false
+            isAdminFlag: false,
+            url: process.env.VUE_APP_API_BASE_URL_REPORT,
         }
     },
     methods: {
@@ -177,7 +178,7 @@ export default {
             this.loading = true;
             const { data: res } = await this.$http({
                 method: 'get',
-                url: 'https://tools.dc-eve.com/report/report',
+                url: this.url + '/report/report',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': sessionStorage.getItem("token"),
@@ -199,7 +200,7 @@ export default {
       async getErrorEsiExport() {
         const { data: res } = await this.$http({
           method: 'get',
-          url: 'https://tools.dc-eve.com/report/esi/corpEsiErrorExport',
+          url: this.url + '/report/esi/corpEsiErrorExport',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem("token"),
@@ -237,7 +238,7 @@ export default {
         // }
 
         let _that = this;
-        axios.post('https://tools.dc-eve.com/report/report', this.jsonData, {
+        axios.post(this.url + '/report/report', this.jsonData, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem("token")

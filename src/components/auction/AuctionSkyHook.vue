@@ -208,7 +208,7 @@
       <edit-dialog
           :visible.sync="dialogVisible"
           :rowData="selectedData"
-          :url="'https://tools.dc-eve.com/qq/auction/skyHook/change'"
+          :param_url="this.url + '/qq/auction/skyHook/change'"
           @save="list"
       ></edit-dialog>
     </div>
@@ -279,7 +279,7 @@ export default {
         constellationId : this.formData.constellation.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/region/list',params, {
+      axios.post(this.url + '/qq/auction/skyHook/region/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -299,7 +299,7 @@ export default {
         regionId : this.formData.region.map(item => item),
         systemId : this.formData.system.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/constellation/list',params, {
+      axios.post(this.url + '/qq/auction/skyHook/constellation/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -319,7 +319,7 @@ export default {
         regionId: this.formData.region.map(item => item),
         constellationId : this.formData.constellation.map(item => item),
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/system/list',params, {
+      axios.post(this.url + '/qq/auction/skyHook/system/list',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -373,7 +373,7 @@ export default {
         page: this.currentPage,
         size: this.pageSize
       }
-      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/page',params, {
+      axios.post(this.url + '/qq/auction/skyHook/page',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -428,7 +428,7 @@ export default {
         return ;
       }
       this.loading = true;
-      axios.post('https://tools.dc-eve.com/qq/auction/skyHook/submit',params, {
+      axios.post(this.url + '/qq/auction/skyHook/submit',params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -477,6 +477,7 @@ export default {
       // 总条数
       total: 0,
       selectedData: [],
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
     }
   },
   mounted() {

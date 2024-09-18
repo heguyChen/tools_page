@@ -36,7 +36,7 @@ export default {
   props: {
     visible: Boolean,
     rowData: [],
-    url: '',
+    param_url: '',
   },
   data() {
     return {
@@ -45,6 +45,7 @@ export default {
       },
       selectedCorp: '',
       selectedOption: {},
+      url: process.env.VUE_APP_API_BASE_URL_QQ,
     }
   },
   methods: {
@@ -58,9 +59,9 @@ export default {
         };
       }
     },
-    // 星域下拉查询
+    // 公司下拉查询
     corpSelectList() {
-      axios.get('https://tools.dc-eve.com/qq/auction/corp/list', {
+      axios.get(this.url + '/qq/auction/corp/list', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),
@@ -87,7 +88,7 @@ export default {
           corporationName: this.selectedOption.level,
         }
       });
-      axios.post(this.url,params, {
+      axios.post(this.param_url,params, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem("token"),

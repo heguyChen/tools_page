@@ -48,6 +48,7 @@ export default {
             papSize: 15,
             //接受pap总数统计的数组
             pap: [],
+            url: process.env.VUE_APP_API_BASE_URL_REPORT,
         }
     },
     methods: {
@@ -92,7 +93,7 @@ export default {
             this.papTime();
             const { data: res } = await this.$http({
                 method: 'get',
-                url: 'https://tools.dc-eve.com/report/pap/characterList',
+                url: this.url + '/report/pap/characterList',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': sessionStorage.getItem("token"),
