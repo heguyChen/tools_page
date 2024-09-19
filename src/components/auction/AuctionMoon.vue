@@ -114,6 +114,26 @@
               </el-form-item>
             </div>
           </el-col>
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <el-form-item label="所属公司">
+                <el-select
+                    @change="handleChange"
+                    style="width: 400px;"
+                    multiple
+                    collapse-tags
+                    clearable
+                    v-model="formData.corp" placeholder="请选择">
+                  <el-option
+                      v-for="item in options.corp"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </div>
+          </el-col>
           <el-col :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
@@ -186,6 +206,7 @@
             width="80">
         </el-table-column>
         <el-table-column
+            sortable="custom"
             class-name="center-align"
             prop="systemName"
             label="星系"
@@ -301,7 +322,8 @@ export default {
         moonName: '',
         level: [],
         isAuto: '',
-        moonStatus: []
+        moonStatus: [],
+
       };
       this.regionSelectList();
       this.constellationSelectList();
@@ -389,7 +411,31 @@ export default {
             this.$message.error(error);
           });
     },
-
+    // 公司下拉查询
+    corpSelectList() {
+      axios.get(this.url + '/qq/auction/corp/list', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem("token"),
+        },
+      })
+          .then(response => {
+            this.options.corp = response.data.data;
+          })
+          .catch(error => {
+            this.$message.error(error);
+          });
+    },
+    handleChange(value) {
+      // 通过选中的 value 获取对应的 label
+      const selectedOption = this.options.corp.find(option => option.value === value);
+      if (selectedOption) {
+        this.selectedOption = {
+          value: selectedOption.value,
+          level: selectedOption.label,
+        };
+      }
+    },
     query() {
       this.currentPage = 1;
       this.list();
@@ -403,6 +449,7 @@ export default {
         systemId: this.formData.system,
         constellationId: this.formData.constellation,
         regionId: this.formData.region,
+        corpId: this.formData.corp,
         level: this.formData.level,
         isAuto: this.formData.isAuto,
         moonStatus: this.formData.moonStatus,
@@ -454,6 +501,8 @@ export default {
         this.formData.orderCol = 'source_price';
       } else if (param.prop && param.prop === 'sourceTax') {
         this.formData.orderCol = 'source_tax';
+      } else if (param.prop && param.prop === 'systemName') {
+        this.formData.orderCol = 'system_name';
       }
       this.list();
     },
@@ -582,6 +631,7 @@ export default {
         system: [],
         constellation: [],
         region: [],
+        corp: [],
         moonName: '',
         level: [],
         isAuto: '',
@@ -593,6 +643,7 @@ export default {
         region:[],
         constellation: [],
         system: [],
+        corp: [],
       },
       dialogVisible: false,
       loading: true,
@@ -611,6 +662,7 @@ export default {
     this.regionSelectList();
     this.constellationSelectList();
     this.systemSelectList();
+    this.corpSelectList();
     this.list();
 
   },

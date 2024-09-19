@@ -147,6 +147,7 @@
           :data="tableData"
           border
           stripe
+          @sort-change="sortChange"
           @selection-change="handleSelectionChange"
           style="width: 100%">
         <el-table-column
@@ -178,6 +179,7 @@
             width="100">
         </el-table-column>
         <el-table-column
+            sortable="custom"
             class-name="center-align"
             prop="systemName"
             label="星系"
@@ -189,6 +191,7 @@
             width="320">
         </el-table-column>
         <el-table-column
+            sortable="custom"
             prop="startPrice"
             label="系统起拍价"
             width="140">
@@ -384,7 +387,9 @@ export default {
         auctionStatus: this.formData.auctionStatus,
         category: this.formData.itemCategory,
         page: this.currentPage,
-        size: this.pageSize
+        size: this.pageSize,
+        isAsc: this.formData.order,
+        orderCol: this.formData.orderCol,
       }
       axios.post(this.url + '/qq/auction/page',params, {
         headers: {
@@ -420,7 +425,25 @@ export default {
     handleSelectionChange(selected) {
       this.selectedData = selected;
     },
-
+    sortChange(param) {
+      if (param.order && param.order === 'ascending') {
+        this.formData.order = true;
+      } else if (param.order && param.order === 'descending') {
+        this.formData.order = false;
+      } else {
+        this.formData.order = null;
+      }
+      if (param.prop && param.prop === 'sourcePrice') {
+        this.formData.orderCol = 'source_price';
+      } else if (param.prop && param.prop === 'sourceTax') {
+        this.formData.orderCol = 'source_tax';
+      } else if (param.prop && param.prop === 'systemName') {
+        this.formData.orderCol = 'system_name';
+      } else if (param.prop && param.prop === 'startPrice') {
+        this.formData.orderCol = 'start_price';
+      }
+      this.list();
+    },
     start(row) {
       let params = [];
       if (row) {
@@ -573,7 +596,9 @@ export default {
         region: [],
         itemName: '',
         auctionStatus: [],
-        itemCategory: ''
+        itemCategory: '',
+        order: '',
+        orderCol: '',
       },
       options : {
         region:[],

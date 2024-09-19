@@ -127,6 +127,7 @@
           :data="tableData"
           border
           stripe
+          @sort-change="sortChange"
           @selection-change="handleSelectionChange"
           style="width: 100%">
         <el-table-column
@@ -152,6 +153,7 @@
             width="100">
         </el-table-column>
         <el-table-column
+            sortable="custom"
             class-name="center-align"
             prop="systemName"
             label="星系"
@@ -332,7 +334,19 @@ export default {
             this.$message.error(error);
           });
     },
-
+    sortChange(param) {
+      if (param.order && param.order === 'ascending') {
+        this.formData.order = true;
+      } else if (param.order && param.order === 'descending') {
+        this.formData.order = false;
+      } else {
+        this.formData.order = null;
+      }
+     if (param.prop && param.prop === 'systemName') {
+        this.formData.orderCol = 'system_name';
+      }
+      this.list();
+    },
     editShow(row) {
       let params = [];
       if (row) {
@@ -371,7 +385,9 @@ export default {
         regionId: this.formData.region,
         skyHookStatus: this.formData.skyHookStatus,
         page: this.currentPage,
-        size: this.pageSize
+        size: this.pageSize,
+        isAsc: this.formData.order,
+        orderCol: this.formData.orderCol,
       }
       axios.post(this.url + '/qq/auction/skyHook/page',params, {
         headers: {
@@ -459,7 +475,9 @@ export default {
         planetName: '',
         level: [],
         isAuto: '',
-        skyHookStatus: []
+        skyHookStatus: [],
+        order: '',
+        orderCol: '',
       },
       options : {
         region:[],
