@@ -4,28 +4,28 @@
       <div class="logo">
         <a href="/" title="dc" @click="home()"></a>
       </div>
-      <div class="slogan">欢迎来到本网站</div>
-      <el-button round class="btn" @click="dialogVisible = true" v-if="this.$store.state.bind">qq绑定</el-button>
-      <div v-else="!this.$store.state.bind" class="qq">{{
+      <div class="slogan">{{ $t("welcome") }}</div>
+      <el-button round class="btn" @click="dialogVisible = true" v-if="this.qq_bind">{{ $t("qq_bind") }}</el-button>
+      <div v-else="!this.qq_bind" class="qq">{{
         '[' + this.qqForm.corpTicker + ']' + this.qqForm.nickName + '-' + this.qqForm.characterName }}
-        <el-button round class="btn1" @click="qqxiu">修改</el-button>
+        <el-button round class="btn1" @click="qqxiu">{{ $t("qq_edit") }}</el-button>
       </div>
     </div>
     <div style="text-decoration-color: #02a6b5" class="bar">
       <div class="dc">
         <ul>
           <li>
-            <a style="cursor: pointer" @click="eve_switch_pap()" v-bind:class="{ bgc: clickli === 0 }">PAP个人详情</a>
+            <a style="cursor: pointer" @click="eve_switch_pap()" v-bind:class="{ bgc: clickli === 0 }">{{ $t("pap_character_detail") }}</a>
           </li>
           <li>
-            <a style="cursor: pointer" @click="eve_switch_papph()" v-bind:class="{ bgc: clickli === 1 }">PAP个人排行</a>
+            <a style="cursor: pointer" @click="eve_switch_papph()" v-bind:class="{ bgc: clickli === 1 }">{{ $t("pap_character_rank") }}</a>
           </li>
           <li>
-            <a style="cursor: pointer" @click="eve_switch_gspap()" v-bind:class="{ bgc: clickli === 2 }">公司内部PAP排行</a>
+            <a style="cursor: pointer" @click="eve_switch_gspap()" v-bind:class="{ bgc: clickli === 2 }">{{ $t("pap_corp_rank") }}</a>
           </li>
           <li>
             <a style="cursor: pointer" @click="eve_switch_dcgspap()" v-bind:class="{ bgc: clickli === 5 }"
-              v-show="this.squadArray.some(value => this.corpArray.includes(value))">DC联盟公司PAP平均排行</a>
+              v-show="this.squadArray.some(value => this.corpArray.includes(value))">{{ $t("pap_alliance_rank") }}</a>
           </li>
 <!--          <li>-->
 <!--            <a href="#" @click="eve_switch_gsqqzhucu()" v-bind:class="{ bgc: clickli === 3 }"-->
@@ -33,15 +33,15 @@
 <!--          </li>-->
           <li>
             <a style="cursor: pointer" @click="eve_switch_gsseat()" v-bind:class="{ bgc: clickli === 4 }"
-              v-show="this.squadArray.some(value => this.corpArray.includes(value))">公司seat注册情况</a>
+              v-show="this.squadArray.some(value => this.corpArray.includes(value))">{{ $t("esi_corp_detail") }}</a>
           </li>
           <li>
             <a style="cursor: pointer" @click="alliance_report()" v-bind:class="{ bgc: clickli === 6 }"
-               v-show="this.squadArray.some(value => this.corpArray.includes(value))">公司实时月报</a>
+               v-show="this.squadArray.some(value => this.corpArray.includes(value))">{{ $t("report_corp_current") }}</a>
           </li>
           <li>
             <a style="cursor: pointer" @click="auction()" v-bind:class="{ bgc: clickli === 7 }"
-               v-show="this.squadArray.some(value => this.corpArray.includes(value))">拍卖</a>
+               v-show="this.squadArray.some(value => this.corpArray.includes(value))">{{ $t("auction") }}</a>
           </li>
           <li>
             <a style="cursor: pointer" @click="auctionMoon()" v-bind:class="{ bgc: clickli === 8 }"
@@ -229,6 +229,7 @@ export default {
       token: '',
       arr: [],
       url: process.env.VUE_APP_API_BASE_URL_QQ,
+      qq_bind: false,
     }
   },
   methods: {
@@ -246,15 +247,14 @@ export default {
         },
       }).catch(err => err)
       this.qqForm = res.data;
-      this.$store.state.form = this.qqForm
 
       this.form.character = this.qqForm.characterName
 
       // this.getadmin();
       if (res.data.qqNumber == 0) {
-        this.$store.state.bind = true
+        this.qq_bind = true
       } else {
-        this.$store.state.bind = false
+        this.qq_bind = false
       }
     },
     handleClose(done) {
@@ -280,7 +280,7 @@ export default {
             data: this.qqForm
           })
 
-          this.$store.state.bind = false;
+          this.qq_bind = false;
           alert(res.message);
           this.dialogVisible = false;
         } else {
@@ -407,7 +407,7 @@ export default {
       }).catch(err => err)
       if (res.code === 200) {
         this.squadArray = res.data;
-        this.$store.userRole = res.data;
+        // this.$store.userRole = res.data;
 
       } else {
         this.$message.error(res.message);

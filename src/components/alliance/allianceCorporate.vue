@@ -86,7 +86,7 @@ export default {
     },
     methods: {
         pushCorporate(rows) {
-            this.$store.state.corpId = rows.corpId
+            // this.$store.state.corpId = rows.corpId
             this.$router.push("/alliancegsbind")
         },
         papTime() {

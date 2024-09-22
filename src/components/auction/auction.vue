@@ -4,9 +4,9 @@
 
       <el-form :inline="true" :model="formData" class="demo-form-inline">
         <el-row :gutter="1">
-          <el-col :span="4">
+          <el-col :span="5">
             <div class="grid-content bg-purple">
-              <el-form-item label="星域">
+              <el-form-item :label="$t('region')">
                 <el-select
                     filterable
                     multiple
@@ -23,9 +23,9 @@
               </el-form-item>
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <div class="grid-content bg-purple">
-              <el-form-item label="星座">
+              <el-form-item :label="$t('constellation')">
                 <el-select
                     filterable
                     multiple
@@ -43,9 +43,9 @@
               </el-form-item>
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <div class="grid-content bg-purple">
-              <el-form-item label="星系">
+              <el-form-item :label="$t('system')">
                 <el-select
                     filterable
                     multiple
@@ -65,39 +65,39 @@
           </el-col>
           <el-col :span="6">
             <div class="grid-content bg-purple">
-              <el-form-item label="商品名称">
-                <el-input v-model="formData.itemName" placeholder="请输入商品名称"></el-input>
+              <el-form-item :label="$t('itemName')">
+                <el-input v-model="formData.itemName" :placeholder="$t('please_input_item_name')"></el-input>
               </el-form-item>
             </div>
           </el-col>
         </el-row>
         <el-row :gutter="1">
-          <el-col :span="4">
+          <el-col :span="5">
             <div class="grid-content bg-purple">
-              <el-form-item label="分类">
+              <el-form-item :label="$t('itemCategory')">
                 <el-select
                     multiple
                     collapse-tags
                     v-model="formData.itemCategory" >
-                  <el-option label="手动月矿" value="手动月矿"></el-option>
-                  <el-option label="自动月矿" value="自动月矿"></el-option>
-                  <el-option label="天钩" value="天钩"></el-option>
+                  <el-option :label="$t('moon')" value="2"></el-option>
+                  <el-option :label="$t('auto_moon')" value="3"></el-option>
+                  <el-option :label="$t('sky_hook')" value="1"></el-option>
                 </el-select>
               </el-form-item>
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="5">
             <div class="grid-content bg-purple">
-              <el-form-item label="状态">
+              <el-form-item :label="$t('auctionStatus')">
                 <el-select
                     multiple
                     collapse-tags
                     v-model="formData.auctionStatus" >
-                  <el-option v-show="isMoonAdmin" label="未开始" value="0"></el-option>
-                  <el-option label="拍卖中" value="1"></el-option>
-                  <el-option label="已结束" value="2"></el-option>
-                  <el-option label="已交付" value="3"></el-option>
-                  <el-option label="拍卖核算中" value="4"></el-option>
+                  <el-option v-show="isMoonAdmin" :label="$t('NOT_START')" value="0"></el-option>
+                  <el-option :label="$t('PROCESSING')" value="1"></el-option>
+                  <el-option :label="$t('END')" value="2"></el-option>
+                  <el-option :label="$t('USE')" value="3"></el-option>
+                  <el-option :label="$t('PROCESSED')" value="4"></el-option>
                 </el-select>
               </el-form-item>
             </div>
@@ -105,14 +105,14 @@
           <el-col :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-button type="primary" @click="query()">查询</el-button>
+                <el-button type="primary" @click="query()">{{ $t("search") }}</el-button>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="2">
             <div class="grid-content bg-purple">
               <el-form-item>
-                <el-button  @click="clear()">清空</el-button>
+                <el-button  @click="clear()">{{ $t("clear") }}</el-button>
               </el-form-item>
             </div>
           </el-col>
@@ -156,47 +156,47 @@
         </el-table-column>
         <el-table-column
             class-name="center-align"
-            prop="itemCategory"
-            label="分类"
+            prop="itemCategoryString"
+            :label="$t('itemCategory')"
             width="80">
         </el-table-column>
         <el-table-column
             class-name="center-align"
             prop="itemName"
-            label="商品名称"
+            :label="$t('itemName')"
             width="180">
         </el-table-column>
         <el-table-column
             class-name="center-align"
             prop="regionName"
-            label="星域"
+            :label="$t('region')"
             width="80">
         </el-table-column>
         <el-table-column
             class-name="center-align"
             prop="constellationName"
-            label="星座"
+            :label="$t('constellation')"
             width="100">
         </el-table-column>
         <el-table-column
             sortable="custom"
             class-name="center-align"
             prop="systemName"
-            label="星系"
+            :label="$t('system')"
             width="100">
         </el-table-column>
         <el-table-column
             prop="itemDetail"
-            label="商品明细"
+            :label="$t('itemDetail')"
             width="320">
         </el-table-column>
         <el-table-column
             sortable="custom"
             prop="startPrice"
-            label="系统起拍价"
+            :label="$t('startPrice')"
             width="140">
           <template slot="header" slot-scope="scope">
-            系统起拍价
+            {{ $t("startPrice") }}
             <el-tooltip placement="top">
               <div slot="content">
                 手动月矿价值=3个月矿石含量*化矿率(87%)*化矿后物品伏尔戈星域最新日成交均价*矿石税率<br>
@@ -212,12 +212,12 @@
         <el-table-column
             class-name="center-align"
             prop="startTime"
-            label="拍卖时间"
+            :label="$t('startTime')"
             width="160">
         </el-table-column>
         <el-table-column
             prop="auctionInfo"
-            label="拍卖信息"
+            :label="$t('auctionInfo')"
             width="200">
           <template slot-scope="scope">
             <div style="white-space: pre-line;">{{ scope.row.auctionInfo }}</div>
@@ -225,24 +225,27 @@
         </el-table-column>
         <el-table-column
             class-name="center-align"
-            prop="auctionStatus"
-            label="拍卖状态"
+            prop="auctionStatusString"
+            :label="$t('auctionStatus')"
             width="80">
+          <template slot-scope="scope">
+            <div style="white-space: pre-line;">{{ scope.row.auctionStatusString }}</div>
+          </template>
         </el-table-column>
         <el-table-column
             class-name="center-align"
-            label="操作"
+            :label="$t('option')"
             width="109">
           <template slot-scope="scope">
             <el-tooltip content="启动" placement="top" effect="light">
               <el-button
-                  v-show="scope.row.auctionStatus == '未开始'"
+                  v-show="scope.row.auctionStatus == 0"
                   @click="start(scope.row)"
                   type="text" icon="el-icon-video-play" size="medium" label="123"></el-button>
             </el-tooltip>
-            <el-tooltip content="竞拍" placement="top" effect="light">
+            <el-tooltip :content="$t('auction')" placement="top" effect="light">
               <el-button
-                  v-show="scope.row.auctionStatus == '拍卖中'"
+                  v-show="scope.row.auctionStatus == 1"
                   @click="auctionShow(scope.row)"
                   type="text" icon="el-icon-s-check" size="medium" label="123"></el-button>
             </el-tooltip>
@@ -280,9 +283,7 @@
 </template>
 
 <script>
-import moment from "moment";
 import axios from 'axios';
-// import marked from "marked";
 import AuctionInput from '@/components/auction/AuctionInput.vue'
 
 export default {
@@ -447,7 +448,7 @@ export default {
     start(row) {
       let params = [];
       if (row) {
-        if (row.auctionStatus != '未开始') {
+        if (row.auctionStatus != 0) {
           this.$message.warning('请选择状态为未开始的物品');
           return ;
         }
@@ -456,7 +457,7 @@ export default {
           auctionStatus: 1
         });
       } else {
-        if (this.selectedData.some(item => item.auctionStatus !== '未开始')) {
+        if (this.selectedData.some(item => item.auctionStatus !== 0)) {
           this.$message.warning('请选择状态为未开始的物品');
           return ;
         }
@@ -496,7 +497,7 @@ export default {
     auctionShow(row) {
       let params = [];
       if (row) {
-        if (row.auctionStatus != '拍卖中') {
+        if (row.auctionStatus != 1) {
           this.$message.warning('请选择状态为拍卖中的物品');
           return ;
         }
@@ -510,24 +511,6 @@ export default {
       }
       this.currentRow = row;
       this.dialogVisible = true; // 显示弹出框
-      // this.loading = true;
-      // axios.post(this.url + '/qq/auction/submit',params, {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': sessionStorage.getItem("token"),
-      //   },
-      // })
-      //     .then(response => {
-      //       if (response.data.code === 200) {
-      //         this.$message.success('月矿拍卖提交成功');
-      //         this.list();
-      //       } else {
-      //         this.$message.error(response.data.data);
-      //       }
-      //     })
-      //     .catch(error => {
-      //       this.$message.error(error);
-      //     });
     },
 
     del(row) {

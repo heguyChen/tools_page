@@ -178,7 +178,6 @@ export default {
                     'Authorization': sessionStorage.getItem("token"),
                 },
                 params: {
-                    corpId: this.$store.state.form.corpId,
                     month: this.month,
                     page: this.currentPage,
                     size: this.pagesize,
